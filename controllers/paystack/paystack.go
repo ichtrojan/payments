@@ -14,6 +14,8 @@ import (
 )
 
 func InitiateCharge(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+
 	domain, secretKey := getPaystackConfig()
 
 	email := "trojan@vergly.com"
@@ -59,8 +61,6 @@ func InitiateCharge(w http.ResponseWriter, r *http.Request) {
 
 		_ = response.JSON(&data)
 
-		w.Header().Set("Content-Type", "application/json")
-
 		if err := json.NewEncoder(w).Encode(data); err != nil {
 			logger().Log(err)
 		}
@@ -76,6 +76,8 @@ func InitiateCharge(w http.ResponseWriter, r *http.Request) {
 }
 
 func VerifyCharge(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+
 	domain, secretKey := getPaystackConfig()
 
 	reference := r.FormValue("reference")
@@ -112,8 +114,6 @@ func VerifyCharge(w http.ResponseWriter, r *http.Request) {
 		}{}
 
 		_ = response.JSON(&data)
-
-		w.Header().Set("Content-Type", "application/json")
 
 		if err := json.NewEncoder(w).Encode(data); err != nil {
 			logger().Log(err)
