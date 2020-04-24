@@ -69,8 +69,6 @@ func InitiateCharge(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	w.Header().Set("Content-Type", "application/json")
-
 	if err := json.NewEncoder(w).Encode(data); err != nil {
 		logger().Log(err)
 	}
