@@ -16,7 +16,7 @@ func main() {
 		log.Fatal(err)
 	}
 
-	if err := http.ListenAndServe(":9090", api); err != nil {
+	if err := http.ListenAndServe(":9999", api); err != nil {
 		logger.Log(err)
 	}
 }
