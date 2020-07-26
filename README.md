@@ -103,7 +103,7 @@ comming soon....
 
 ## Contribution
 
-* Deji Ajibola - [Twitter](https://twitter.com/damndeji) [GitHub](https://github.com/youthtrouble) white_check_mark Fetch Transaction
+* Deji Ajibola - [Twitter](https://twitter.com/damndeji) [GitHub](https://github.com/youthtrouble) Fetch Transaction
 
 Please contribute 
 
