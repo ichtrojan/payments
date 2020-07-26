@@ -259,7 +259,7 @@ func (config paystackConfig) FetchTransaction(id int64) (fetchTransaction, error
 			Status:              data.Data.Status,
 			Amount:              data.Data.Amount,
 			Reference:           data.Data.Reference,
-			Message:   data.Data.GatewayResponse,
+			Message:   			 data.Data.GatewayResponse,
 			Bank:                data.Data.Authorization.Bank,
 			CardType:            data.Data.Authorization.Brand,
 		}, nil
