@@ -77,6 +77,22 @@ func main () {
     fmt.Printf("%+v\n", chargeCard)
 }
 ```
+* Fetch Transaction
+
+```go
+...
+
+func main () {
+    chargeCard, err := paystack.FetchTransaction(292584114)
+    
+    if err != nil {
+        log.Println(err)
+    }
+
+    fmt.Printf("%+v\n", fetchTransaction)
+}
+```
+
 
 >**NOTE**<br/>
 >Check the `example` directory to see a sample implementation
@@ -87,6 +103,7 @@ comming soon....
 
 ## Contribution
 
+* Deji Ajibola - [Twitter](https://twitter.com/damndeji) [GitHub](https://github.com/youthtrouble)
 Please contribute 
 
 
