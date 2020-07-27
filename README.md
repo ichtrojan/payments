@@ -103,9 +103,5 @@ comming soon....
 
 ## Contributors
 
-* Deji Ajibola - [Twitter](https://twitter.com/damndeji) [GitHub](https://github.com/youthtrouble) Fetch Transaction
-
-Please contribute 
-
-
+* Deji Ajibola - [Twitter](https://twitter.com/damndeji) [GitHub](https://github.com/youthtrouble)
 
