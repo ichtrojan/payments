@@ -39,9 +39,9 @@ type chargeCard struct {
 type transaction struct {
 	Status    string
 	Message   string
-	Id		  int64	
+	Id        int64
 	Amount    int64
-	Reference string      
+	Reference string
 	Bank      string
 	CardType  string
 }
@@ -211,7 +211,6 @@ func (config paystackConfig) ChargeCard(authorization string, email string, amou
 	return chargeCard{}, errors.New(data.Message)
 }
 
-
 func (config paystackConfig) FetchTransaction(transactionId int64) (transaction, error) {
 	endpoint, err := url.Parse(paystackDomain + fmt.Sprintf("/transaction/%d", transactionId))
 
@@ -238,25 +237,23 @@ func (config paystackConfig) FetchTransaction(transactionId int64) (transaction,
 				Amount          int64  `json:"amount"`
 				Reference       string `json:"reference"`
 				GatewayResponse string `json:"gateway_response"`
-				Authorization struct {
-					CardType          string `json:"brand"`
-					Bank              string `json:"bank"`
+				Authorization   struct {
+					CardType string `json:"brand"`
+					Bank     string `json:"bank"`
 				}
 			} `json:"data"`
 		}{}
 
-
 		_ = response.JSON(&data)
 
-
 		return transaction{
-			CardType:            data.Data.Authorization.CardType,
-			Bank:                data.Data.Authorization.Bank,
-			Message:   			 data.Data.GatewayResponse,
-			Reference:           data.Data.Reference,
-			Status:              data.Data.Status,
-			Amount:              data.Data.Amount,
-			Id:                  data.Data.Id,
+			CardType:  data.Data.Authorization.CardType,
+			Bank:      data.Data.Authorization.Bank,
+			Message:   data.Data.GatewayResponse,
+			Reference: data.Data.Reference,
+			Status:    data.Data.Status,
+			Amount:    data.Data.Amount,
+			Id:        data.Data.Id,
 		}, nil
 	}
 
