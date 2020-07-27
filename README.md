@@ -83,13 +83,13 @@ func main () {
 ...
 
 func main () {
-    chargeCard, err := paystack.FetchTransaction(292584114)
+    transaction, err := paystack.FetchTransaction(292584114)
     
     if err != nil {
         log.Println(err)
     }
 
-    fmt.Printf("%+v\n", fetchTransaction)
+    fmt.Printf("%+v\n", transaction)
 }
 ```
 
@@ -101,7 +101,7 @@ func main () {
 
 comming soon....
 
-## Contribution
+## Contributors
 
 * Deji Ajibola - [Twitter](https://twitter.com/damndeji) [GitHub](https://github.com/youthtrouble) Fetch Transaction
 

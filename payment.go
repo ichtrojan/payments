@@ -36,12 +36,12 @@ type chargeCard struct {
 	Reference string
 }
 
-type fetchTransaction struct {
-	Id		  int64
+type transaction struct {
 	Status    string
+	Message   string
+	Id		  int64	
 	Amount    int64
 	Reference string      
-	Message   string
 	Bank      string
 	CardType  string
 }
@@ -212,11 +212,11 @@ func (config paystackConfig) ChargeCard(authorization string, email string, amou
 }
 
 
-func (config paystackConfig) FetchTransaction(id int64) (fetchTransaction, error) {
-	endpoint, err := url.Parse(paystackDomain + fmt.Sprintf("/transaction/%d", id))
+func (config paystackConfig) FetchTransaction(transactionId int64) (transaction, error) {
+	endpoint, err := url.Parse(paystackDomain + fmt.Sprintf("/transaction/%d", transactionId))
 
 	if err != nil {
-		return fetchTransaction{}, err
+		return transaction{}, err
 	}
 
 	response, _ := goozzle.Get(endpoint).Header("Authorization", fmt.Sprintf("Bearer %s", config.secretKey)).Do()
@@ -227,7 +227,7 @@ func (config paystackConfig) FetchTransaction(id int64) (fetchTransaction, error
 	}{}
 
 	if err := response.JSON(&data); err != nil {
-		return fetchTransaction{}, err
+		return transaction{}, err
 	}
 
 	if data.Status && response.Status() == 200 {
@@ -239,12 +239,7 @@ func (config paystackConfig) FetchTransaction(id int64) (fetchTransaction, error
 				Reference       string `json:"reference"`
 				GatewayResponse string `json:"gateway_response"`
 				Authorization struct {
-					AuthorizationCode string `json:"authorization_code"`
-					FirstSix          string `json:"bin"`
-					LastFour          string `json:"last4"`
-					Brand             string `json:"brand"`
-					Month             string `json:"exp_month"`
-					Year              string `json:"exp_year"`
+					CardType          string `json:"brand"`
 					Bank              string `json:"bank"`
 				}
 			} `json:"data"`
@@ -254,17 +249,16 @@ func (config paystackConfig) FetchTransaction(id int64) (fetchTransaction, error
 		_ = response.JSON(&data)
 
 
-		return fetchTransaction{
-			Id:                  data.Data.Id,
+		return transaction{
+			CardType:            data.Data.Authorization.CardType,
+			Bank:                data.Data.Authorization.Bank,
+			Message:   			 data.Data.GatewayResponse,
+			Reference:           data.Data.Reference,
 			Status:              data.Data.Status,
 			Amount:              data.Data.Amount,
-			Reference:           data.Data.Reference,
-			Message:   			 data.Data.GatewayResponse,
-			Bank:                data.Data.Authorization.Bank,
-			CardType:            data.Data.Authorization.Brand,
+			Id:                  data.Data.Id,
 		}, nil
 	}
 
-	return fetchTransaction{}, errors.New(data.Message)
-
+	return transaction{}, errors.New(data.Message)
 }
