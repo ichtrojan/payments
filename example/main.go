@@ -32,4 +32,12 @@ func main() {
 	}
 
 	fmt.Printf("%+v\n", chargeCard)
+
+	fetchTransaction, err := paystack.FetchTransaction(01)
+
+	if err != nil {
+		log.Println(err)
+	}
+
+	fmt.Printf("%+v\n", fetchTransaction)
 }

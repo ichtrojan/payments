@@ -36,6 +36,16 @@ type chargeCard struct {
 	Reference string
 }
 
+type transaction struct {
+	Status    string
+	Message   string
+	Id		  int64	
+	Amount    int64
+	Reference string      
+	Bank      string
+	CardType  string
+}
+
 func Paystack(secretKey string) paystackConfig {
 	return paystackConfig{
 		secretKey: secretKey,
@@ -199,4 +209,56 @@ func (config paystackConfig) ChargeCard(authorization string, email string, amou
 	}
 
 	return chargeCard{}, errors.New(data.Message)
+}
+
+
+func (config paystackConfig) FetchTransaction(transactionId int64) (transaction, error) {
+	endpoint, err := url.Parse(paystackDomain + fmt.Sprintf("/transaction/%d", transactionId))
+
+	if err != nil {
+		return transaction{}, err
+	}
+
+	response, _ := goozzle.Get(endpoint).Header("Authorization", fmt.Sprintf("Bearer %s", config.secretKey)).Do()
+
+	data := struct {
+		Status  bool   `json:"status"`
+		Message string `json:"message"`
+	}{}
+
+	if err := response.JSON(&data); err != nil {
+		return transaction{}, err
+	}
+
+	if data.Status && response.Status() == 200 {
+		data := struct {
+			Data struct {
+				Id              int64  `json:"id"`
+				Status          string `json:"status"`
+				Amount          int64  `json:"amount"`
+				Reference       string `json:"reference"`
+				GatewayResponse string `json:"gateway_response"`
+				Authorization struct {
+					CardType          string `json:"brand"`
+					Bank              string `json:"bank"`
+				}
+			} `json:"data"`
+		}{}
+
+
+		_ = response.JSON(&data)
+
+
+		return transaction{
+			CardType:            data.Data.Authorization.CardType,
+			Bank:                data.Data.Authorization.Bank,
+			Message:   			 data.Data.GatewayResponse,
+			Reference:           data.Data.Reference,
+			Status:              data.Data.Status,
+			Amount:              data.Data.Amount,
+			Id:                  data.Data.Id,
+		}, nil
+	}
+
+	return transaction{}, errors.New(data.Message)
 }
